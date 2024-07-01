@@ -1,0 +1,48 @@
+{% extends "layouts/profile.html" %}
+
+{% block content  %}
+
+<div id="profile" class="flex flex-col items-center">
+    
+    <div class="w-full md:w-[36rem] lg:w-[50rem]">
+        <div class="card p-6">
+            <div class="text-center flex flex-col items-center">
+                <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile.avatar }}" />
+                <div class="text-center max-w-md">
+                    <h1>{{ user.first_name }}  {{ user.last_name }}</h1>
+                    <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>            
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tabs" class="flex justify-center my-4 gap-2" hx-target="#tab-contents" hx-swap="innerHTML"
+    _="on htmx:afterOnLoad take .selected for event.target"> 
+        <a hx-get="{% url 'userprofile' profile.user.username %}?liked-posts" class="tab">Liked Posts</a>
+        <a hx-get="{% url 'userprofile' profile.user.username %}?top-comments" class="tab">Top Comments</a>
+        <a hx-get="{% url 'userprofile' profile.user.username %}?my-orders" class="tab">My orders</a>
+    </div>
+
+    <div id="tab-contents" class="w-full flex flex-col items-center">
+        
+        <div class="grid place-items-start gap-x-8 mx-auto max-w-xl 
+        {% if posts.count <= 1 %}
+        {% elif posts.count == 2 %}lg:grid-cols-2 lg:max-w-5xl
+        {% else %}lg:grid-cols-2 lg:max-w-5xl xl:grid-cols-3 xl:max-w-7xl{% endif %}">
+
+        {% if posts %}
+            {% for post in posts %}
+            {% include 'a_posts/post.html' %}
+            {% endfor %}
+        {% else %}
+            <div class="w-full text-center mt-10"></div>
+        {% endif %}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock  %}

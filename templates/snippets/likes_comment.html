@@ -1,0 +1,29 @@
+{% load static %}
+<div class="flex items-center gap-4 [&>a:hover]:underline">
+    {% if comment.likes.count %}
+    <div class="flex items-center gap-1">
+        {% if user in comment.likes.all %}
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4" viewBox="0 0 24 24" style="fill: #ff0000;">
+            <path d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z"/>
+        </svg>
+        {% else %}
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4" viewBox="0 0 24 24">
+            <path d="M12 9.229c.234-1.12 1.547-6.229 5.382-6.229 2.22 0 4.618 1.551 4.618 5.003 0 3.907-3.627 8.47-10 12.629-6.373-4.159-10-8.722-10-12.629 0-3.484 2.369-5.005 4.577-5.005 3.923 0 5.145 5.126 5.423 6.231zm-12-1.226c0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-7.962-9.648-9.028-12-3.737-2.338-5.262-12-4.27-12 3.737z"/>
+        </svg>
+        {% endif %}
+        {{ comment.likes.count }}
+    </div>
+    {% endif %}
+    {% if user.is_authenticated and user != comment.author %}                    
+        <a class="cursor-pointer" 
+        hx-get="{% url 'blog:like-comment' comment.id %}"
+        hx-target="closest div"
+        hx-swap="outerHTML">
+            {% if user in comment.likes.all %}
+            <b>Liked</b>
+            {% else %}
+            Like
+            {% endif %}
+        </a>
+    {% endif %}
+</div>
