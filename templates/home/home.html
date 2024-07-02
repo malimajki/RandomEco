@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- HERO -->
+<div class="hero min-h-screen" style="background-image: url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg);">
+    <div class="hero-overlay bg-opacity-60"></div>
+    <div class="hero-content text-center text-neutral-content">
+      <div class="max-w-md">
+        <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
+        <p class="mb-5">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+        <button class="btn btn-primary">Get Started</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mx-auto text-center pb-4 my-6 text-2xl text-gray-200 border-b-2 max-w-[75%]">Some Products from eccommerce</h2>
+  <div class="max-w-[80%] mx-auto place-items-center grid grid-cols-3 gap-5">
+    {% for product in products|slice:6 %}
+    <div class="card w-96 glass">
+        <figure>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="product-image"/>
+            {% else %}
+            <img src="{% static 'img/image_not_found.png' %}" alt="default-product-image"/>
+            {% endif %}
+        </figure>
+        <div class="card-body">
+          <div class="flex flex-row justify-between mr-4">
+            <h2 class="card-title text-2xl">{{ product.name }}</h2>
+            <h2 class="card-title text-sm">{{ product.category.name }}</h2>
+          </div>
+            <p>{{ product.price }},-</p>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary">Buy now!</button>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<h2 class="mx-auto text-center pb-4 mt-24 mb-6 text-2xl text-gray-200 border-b-2 max-w-[75%]">Newest Posts from blog</h2>
+{% for post in posts %}
+<div class="card lg:card-side bg-base-100 shadow-xl mt-8 flex mx-auto max-w-[75%]">
+  <figure>
+    <img
+      src="{{ post.image.url }}"
+      alt="Album" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title text-2xl">{{ post.title }}</h2>
+    <h2 class="card-title text-sm">{{ post.category.name }}</h2>
+    <p>{{ post.body }}</p>
+    <p>{{ post.created|date:"j. n. Y" }}</p>
+    <div class="card-actions justify-end">
+      <button class="btn btn-primary">Read More</button>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock content %}

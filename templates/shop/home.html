@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- SUBNAV -->
+<div class="text-sm breadcrumbs my-5">
+    <ul class="place-content-center">
+        <li>
+            <a href="{% url 'home' %}">Home</a>
+        </li> 
+        <li>
+            <a href="{% url 'shop:home' %}">E-Shop</a>
+        </li> 
+    </ul>
+</div>
+<div class="grid grid-cols-3 md:grid-cols-6">
+    <div class="pl-4">
+        {% include "shop/sidebar.html" %}
+    </div>
+    <div class="mx-auto place-items-center col-span-1 md:col-span-4 flex flex-col md:grid grid-cols-2 xl:grid-cols-3 gap-5">
+        {% for product in products %}
+        <div class="card max-w-80 md:max-w-96 glass">
+            <figure>
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="product-image"/>
+                {% else %}
+                <img src="{% static 'img/image_not_found.png' %}" alt="default-product-image"/>
+                {% endif %}
+            </figure>
+            <div class="card-body">
+            <div class="flex flex-row justify-between mr-4">
+                <h2 class="card-title text-2xl">{{ product.name }}</h2>
+                <h2 class="card-title text-sm">{{ product.category.name }}</h2>
+            </div>
+                <p>{{ product.price }},-</p>
+                <div class="card-actions justify-end">
+                <button class="btn btn-primary">Buy now!</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pr-8">
+        {% include "shop/cart-partial.html" %}
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    const rangeInput = document.querySelectorAll(".range-input input"),
+    priceInput = document.querySelectorAll(".price-input input"),
+    range = document.querySelector(".slider .progress");
+    let priceGap = 10;
+
+    priceInput.forEach(input =>{
+        input.addEventListener("input", e =>{
+            let minPrice = parseInt(priceInput[0].value),
+            maxPrice = parseInt(priceInput[1].value);
+            
+            if((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max){
+                if(e.target.className === "input-min"){
+                    rangeInput[0].value = minPrice;
+                    range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
+                }else{
+                    rangeInput[1].value = maxPrice;
+                    range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                }
+            }
+        });
+    });
+
+    rangeInput.forEach(input =>{
+        input.addEventListener("input", e =>{
+            let minVal = parseInt(rangeInput[0].value),
+            maxVal = parseInt(rangeInput[1].value);
+
+            if((maxVal - minVal) < priceGap){
+                if(e.target.className === "range-min"){
+                    rangeInput[0].value = maxVal - priceGap
+                }else{
+                    rangeInput[1].value = minVal + priceGap;
+                }
+            }else{
+                priceInput[0].value = minVal;
+                priceInput[1].value = maxVal;
+                range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+            }
+        });
+    });
+
+</script>
+{% endblock %}

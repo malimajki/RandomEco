@@ -1,0 +1,45 @@
+<div class=" card sticky top-[100px] space-y-2 px-4 py-4 relative">
+    <h2>Cart</h2>
+    <div class="absolute top-2 right-12">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+    </div>
+    <div class="absolute top-2 right-8">
+        {{ total_items }}</div>
+    <ul>
+        {% for item in cart.items.all %}
+            <li class="flex items-center justify-between mb-2">
+                <span>{{ item.product.name }} <span>{{ item.product.price }},-</span> x {{ item.quantity }} total: {{item.subtotal}}</span>
+                <div class="flex items-center">
+                    <button class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700" 
+                            hx-post="{% url 'shop:update_cart' item.id %}" 
+                            hx-vals='{"action":"increment"}' 
+                            hx-target="#cart" 
+                            hx-swap="innerHTML">
+                        +
+                    </button>
+                    <button class="bg-yellow-500 text-white px-2 py-1 rounded mx-2 hover:bg-yellow-700" 
+                            hx-post="{% url 'shop:update_cart' item.id %}" 
+                            hx-vals='{"action":"decrement"}' 
+                            hx-target="#cart" 
+                            hx-swap="innerHTML">
+                        -
+                    </button>
+                    <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700" 
+                            hx-post="{% url 'shop:update_cart' item.id %}" 
+                            hx-vals='{"action":"delete"}' 
+                            hx-target="#cart" 
+                            hx-swap="innerHTML">
+                        Delete
+                    </button>
+                </div>
+            </li>
+        {% empty %}
+            <li>Your cart is empty.</li>
+        {% endfor %}
+    </ul>
+    <p class="text-lg font-bold mt-4">Total price: {{ total_price }}</p>
+    <a href="{% url 'shop:checkout' %}" class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 inline-block mt-10">Checkout</a>
+</div>
+

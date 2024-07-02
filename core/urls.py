@@ -6,9 +6,9 @@ from home.views import home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path("api/", include('api.urls' ,namespace='api')),
-    path('accounts/', include('allauth.urls')),
     path('', home, name="home"),
     path("shop/", include('shop.urls' ,namespace='shop')),
     path("blog/", include('blog.urls' ,namespace='blog')),

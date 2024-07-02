@@ -28,7 +28,7 @@ def shop(request):
         'max_value':max_value
     }
 
-    return render(request, "shop.home.html", context)    
+    return render(request, "shop/home.html", context)    
 
 def product(request, slug):
     product = get_object_or_404(Product, slug=slug)
