@@ -5,7 +5,7 @@
     <div clas="flex gap-2 items-center">
         <span class='font-bold' >To:</span>
         <input class='p-3 w-full lg:full' placeholeder='Search user...' type='text' name='search_user'
-        hx-get="{% url "inbox:inbox-searchusers" %}"
+        hx-get="{% url 'inbox:inbox-searchusers' %}"
         hx-trigger='keyup changed'
         hx-target='#search-results'
         hx-swap='innerHTML'>
