@@ -5,6 +5,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-wz1r$3adj+-#inm+0fg9s&8aa&4y!lm(c7%8d2i_(^(547--w7"
 
+ENCRYPT_KEY = b'wtZ2ejmmIAirhXhZKpqNchEb-thIi2A1B2xDD45S3gM='
+
 DEBUG = True
 
 SESSION_COOKIE_AGE = 86400
@@ -34,6 +36,7 @@ INSTALLED_APPS = [
     "blog",
     "users",
     "shop",
+    "inbox",
     "dashboard",
 ]
 

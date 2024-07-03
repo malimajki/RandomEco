@@ -1,8 +1,8 @@
-{% extends "layouts/profile.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-<inbox class='grid grid-cols-5 sm:grid-cols-4 h-[calc(100vh-8rem)] md:h-[calc(100vh-12rem)] shadow-2xl rounded-2xl mx-3'>
+<div class='grid grid-cols-5 sm:grid-cols-4 h-[calc(100vh-8rem)] md:h-[calc(100vh-12rem)] shadow-2xl rounded-2xl mx-3'>
     <div x-data='{modal_open: false}' class='cols-span-1 bg-slate-100 rounded-l-2xl p-2 overflow-y-auto'>
         
         <div class='p-0 sm:p-5 mb-3 sticky top-0 z-10'>
@@ -21,7 +21,7 @@
                     <div class='relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-[500px]'>
                         <div @click.away='modal_open = false' class='bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4'>
 
-                            {% include "a_inbox/form_searchuser.html" %}
+                            {% include "inbox/form_searchuser.html" %}
 
                         </div>
                     </div>
@@ -29,14 +29,14 @@
             </div>
         </div>
 
-        {% include "a_inbox/my_conversations.html" %}
+        {% include "inbox/my_conversations.html" %}
 
     </div>
 
 
-    {% include "a_inbox/conversation.html" %}
+    {% include "inbox/conversation.html" %}
 
-</inbox>
+</div>
 
 {% endblock  %}
 
