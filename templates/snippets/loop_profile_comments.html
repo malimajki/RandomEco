@@ -5,7 +5,7 @@
         {% for comment in comments %}
         <div class="flex gap-2">
             <a href="{% url 'blog:post' comment.parent_post.id %}">{{ comment.parent_post.title }} </a>
-            {% include 'a_blog/comment.html' %}
+            {% include 'blog/comment.html' %}
         </div>
         {% endfor %}
     {% else %}

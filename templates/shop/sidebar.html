@@ -3,11 +3,11 @@
             x-transition:enter-start="opacity-0 -mt-96"
             x-transition:enter-end="opacity-100 mt-0">
     <section class="card p-4">
-        <h2>Search</h2>
+        <h2 class="text-2xl text-black text-semibold pb-4">Search</h2>
         <form class="pb-5" action="." method="get">
             <div class="flex">
                 <input type="text" name="shop_search" class="p-4 bg-gray-100 border-0 rounded-l-xl" placeholder="Search...">
-                <button class="p-4 bg-blue-500 border-0 rounded-r-xl">
+                <button class="p-4 bg-primary hover:bg-indigo-500 border-0 rounded-r-xl text-black">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg> 
@@ -16,24 +16,24 @@
         </form>
     </section>
     <section class="card p-4">
-        <h2>Categories</h2>
+        <h2 class="text-2xl text-black text-semibold pb-4">Categories</h2>
         <ul class="space-y-2 rounded-md">
             <li>
-                <a href="{% url 'shop:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-gray-100 transition duration-150 rounded-xl {% if not active_category %}bg-indigo-100{% endif %}">
-                    <span class="font-bold text-sm">All categories</span> 
+                <a href="{% url 'shop:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl {% if not active_category %}bg-primary{% endif %}">
+                    <span class="text-black font-bold text-sm">All categories</span> 
                 </a>
-            </li class="hover:bg-gray-100 transition duration-150">
+            </li>
             {% for category in categories %}
             <li>
-                <a href="{% url 'shop:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-gray-100 transition duration-150 rounded-xl  {% if category.slug == active_category %}bg-indigo-100{% endif %}">
-                    <span class="font-bold text-sm">{{ category.name }}</span>
+                <a href="{% url 'shop:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl  {% if category.slug == active_category %}bg-primary{% endif %}">
+                    <span class="text-black font-bold text-sm">{{ category.name }}</span>
                 </a>
             </li>
             {% endfor %}
         </ul>
     </section>
     <section class="card p-4">
-        <h2>Cena</h2>
+        <h2 class="text-2xl text-black text-semibold pb-4">Cena</h2>
         <div class="slider h-1 relative bg-blue-400 rounded-full mt-3">
             <div class="progress h-full left-0 right-0 absolute rounded-full bg-blue-400"></div>
         </div>
@@ -43,11 +43,126 @@
         </div>
         <div class="price-input w-full flex mx-auto my-10">
             <div class="field">
-                <input type="number" class="input-min" value="0">
+                <input type="number" class="bg-white text-black input-min" value="0">
             </div>  
             <div class="field">
-                <input type="number" class="input-max" value="{{ max_value }}">
+                <input type="number" class="bg-white text-black input-max" value="{{ max_value }}">
             </div>
         </div>
     </section>
 </aside>
+
+{% block scripts %}
+<script>
+    const rangeInput = document.querySelectorAll(".range-input input"),
+    priceInput = document.querySelectorAll(".price-input input"),
+    range = document.querySelector(".slider .progress");
+    let priceGap = 10;
+
+    priceInput.forEach(input =>{
+        input.addEventListener("input", e =>{
+            let minPrice = parseInt(priceInput[0].value),
+            maxPrice = parseInt(priceInput[1].value);
+            
+            if((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max){
+                if(e.target.className === "input-min"){
+                    rangeInput[0].value = minPrice;
+                    range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
+                }else{
+                    rangeInput[1].value = maxPrice;
+                    range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                }
+            }
+        });
+    });
+
+    rangeInput.forEach(input =>{
+        input.addEventListener("input", e =>{
+            let minVal = parseInt(rangeInput[0].value),
+            maxVal = parseInt(rangeInput[1].value);
+
+            if((maxVal - minVal) < priceGap){
+                if(e.target.className === "range-min"){
+                    rangeInput[0].value = maxVal - priceGap
+                }else{
+                    rangeInput[1].value = minVal + priceGap;
+                }
+            }else{
+                priceInput[0].value = minVal;
+                priceInput[1].value = maxVal;
+                range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+            }
+        });
+    });
+
+</script>
+{% endblock %}
+
+<!-- <div class="slider h-1 relative bg-blue-400 rounded-full mt-3">
+    <div class="progress h-full left-0 right-0 absolute rounded-full bg-blue-400"></div>
+</div>
+<div class="range-input relative mb-2">
+    <input type="range" class="range-min absolute w-full h-1 -top-[4px] -left-2 bg-transparent" min="0" max="{{ max_value }}" value="0" step="10">
+    <input type="range" class="range-max absolute w-full h-1 -top-[4px] -right-2 bg-transparent" min="0" max="{{ max_value }}" value="{{ max_value }}" step="10">
+</div>
+<div class="price-input w-full flex mx-auto my-10">
+    <div class="field">
+        <input type="number" class="bg-white text-black input-min" value="0">
+    </div>
+    <div class="field">
+        <input type="number" class="bg-white text-black input-max" value="{{ max_value }}">
+    </div>
+</div>
+
+<script>
+    const rangeInputs = document.querySelectorAll(".range-input input"),
+        priceInputs = document.querySelectorAll(".price-input input"),
+        progress = document.querySelector(".slider .progress");
+    const priceGap = 10;
+
+    function updateProgress() {
+        const minVal = parseInt(rangeInputs[0].value);
+        const maxVal = parseInt(rangeInputs[1].value);
+        progress.style.left = (minVal / rangeInputs[0].max) * 100 + "%";
+        progress.style.right = 100 - (maxVal / rangeInputs[1].max) * 100 + "%";
+    }
+
+    function handlePriceInput(e) {
+        const minPrice = parseInt(priceInputs[0].value);
+        const maxPrice = parseInt(priceInputs[1].value);
+
+        if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInputs[1].max) {
+            if (e.target.classList.contains("input-min")) {
+                rangeInputs[0].value = minPrice;
+                updateProgress();
+            } else if (e.target.classList.contains("input-max")) {
+                rangeInputs[1].value = maxPrice;
+                updateProgress();
+            }
+        }
+    }
+
+    function handleRangeInput(e) {
+        let minVal = parseInt(rangeInputs[0].value);
+        let maxVal = parseInt(rangeInputs[1].value);
+
+        if ((maxVal - minVal) >= priceGap) {
+            priceInputs[0].value = minVal;
+            priceInputs[1].value = maxVal;
+            updateProgress();
+        } else {
+            if (e.target.classList.contains("range-min")) {
+                rangeInputs[0].value = maxVal - priceGap;
+            } else if (e.target.classList.contains("range-max")) {
+                rangeInputs[1].value = minVal + priceGap;
+            }
+        }
+    }
+
+    priceInputs.forEach(input => input.addEventListener("input", handlePriceInput));
+    rangeInputs.forEach(input => input.addEventListener("input", handleRangeInput));
+
+    // Initialize the progress bar on page load
+    updateProgress();
+</script> -->

@@ -1,22 +1,27 @@
-{% extends "layouts/box.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-
-<h1 class="mb-2">Edit Profile</h1>
-<div class="text-center flex flex-col items-center">
-    <img id="avatar" class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile.avatar }}" />
-    <div class="text-center max-w-md">
-        <h1 id="realname">{{ user.profile.first_name }} {{ user.profile.last_name }}</h1>
-        <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+<div class="block max-w-3xl mx-auto my-12 px-6">
+    <div class="card p-8 !pb-10">
+        <h1 class="mb-2">Edit Profile</h1>
+        <div class="text-center flex flex-col items-center">
+            <img id="avatar" class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile.avatar }}" />
+            <div class="text-center max-w-md">
+                <h1 id="realname">{{ user.profile.first_name }} {{ user.profile.last_name }}</h1>
+                <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+            </div>
+        </div>
+        <form class="bg-gray-200 text-center center text-black w-full p-4 rounded-xl" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="flex justify-center gap-8 mt-6">
+                <button class="btn btn-success" type="submit" >Submit</button>
+                <a class="btn btn-warning secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+            </div>
+        </form>
+        <a class="btn bg-error hover:bg-red-600 mt-4 text-black" href="{% url 'profile:profile-delete' %}">Delete Profile</a>
     </div>
 </div>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" >Submit</button>
-    <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
-</form>
-<a class="mt-12 hover:underline text-gray-500" href="{% url 'profile-delete' %}">Delete Profile</a>
 
 
 <script>

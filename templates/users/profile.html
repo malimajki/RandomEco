@@ -1,4 +1,4 @@
-{% extends "layouts/profile.html" %}
+{% extends "base.html" %}
 
 {% block content  %}
 
@@ -18,13 +18,12 @@
 
     <div id="tabs" class="flex justify-center my-4 gap-2" hx-target="#tab-contents" hx-swap="innerHTML"
     _="on htmx:afterOnLoad take .selected for event.target"> 
-        <a hx-get="{% url 'userprofile' profile.user.username %}?liked-posts" class="tab">Liked Posts</a>
-        <a hx-get="{% url 'userprofile' profile.user.username %}?top-comments" class="tab">Top Comments</a>
-        <a hx-get="{% url 'userprofile' profile.user.username %}?my-orders" class="tab">My orders</a>
+        <a hx-get="{% url 'profile:userprofile' profile.user.username %}?liked-posts" class="tab">Liked Posts</a>
+        <a hx-get="{% url 'profile:userprofile' profile.user.username %}?top-comments" class="tab">Top Comments</a>
+        <a hx-get="{% url 'profile:userprofile' profile.user.username %}?my-orders" class="tab">My orders</a>
     </div>
 
     <div id="tab-contents" class="w-full flex flex-col items-center">
-        
         <div class="grid place-items-start gap-x-8 mx-auto max-w-xl 
         {% if posts.count <= 1 %}
         {% elif posts.count == 2 %}lg:grid-cols-2 lg:max-w-5xl
@@ -32,17 +31,13 @@
 
         {% if posts %}
             {% for post in posts %}
-            {% include 'a_posts/post.html' %}
+            {% include 'blog/post.html' %}
             {% endfor %}
         {% else %}
             <div class="w-full text-center mt-10"></div>
         {% endif %}
-
         </div>
-
     </div>
-
-
 </div>
 
 {% endblock  %}

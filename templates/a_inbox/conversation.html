@@ -1,0 +1,60 @@
+<div id='conversation' class='col-span-4 sm:col-span-3 opacity-0 flex flex-col bg-white rounded-r-2xl pt-10 relative overflow-y-auto'
+_='on load wait for 5ms then remove .opacity-0'>
+
+    {% if conversation %}
+    
+    <div class='text-center flex flex-col items-center '>
+        {% for participant in conversation.participants.all %}
+        {% if participant != request.user %}
+        <a href='{% url "userprofile" participant.username %}'>
+            <img class='w-24 h-24 object-cover rounded-full mb-4' src="{{ participant.profile.avatar }}">
+        </a>
+        <div class='text-center max-w-md'>
+            <h1 class='text-lg'>{{ participant.profile.first_name }}</h3> 
+            <div class='text-sm text-gray-400 mb-2 -mt-5' >@{{ participant.username }}</div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <ul id='inbox_messages' class='flex flex-col justify-end grow gap-6 p-4 sm:p-10 pb-0'>
+        {% for message in conversation.messages.all reversed %}
+        <li>
+            <div class='flex flex-col md:flex-row gap-1 md:gap-6'>
+                <a class='contents' href='{% url "userprofile" message.sender.username %}'>
+                    <img class='w-14 h-14 object-cover rounded-full' src="{{ message.sender.profile.avatar }}">
+                </a>
+                <div class='bg-white p-4 w-full rounded-xl border-2 border-gray-200'>
+                    <div class='flex flex-col md:flex-row justify-between text-xs pb-3 text-zinc-500'>
+                        <div>
+                            <span class='font-bold text-base text-black mr-1'>{{ message.sender.profile.first_name }}</span>@{{ message.sender.username }}
+                        </div>
+                        <div>{{ message.created }} ({{ message.created|timesince }})</div>
+                    </div>
+                    <div><p class='whitespace-pre-wrap'>{{ message.body_decrypted }}</p></div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+
+    </ul>
+
+    <div class='sticky bottom-0 z-1 pl-4 sm:pl-10 pt-6 pb-10 flex bg-white'>
+        <a class='flex cursor-pointer items-center gap-2 bg-gray-800 hover:bg-indigo-600 text-white rounded-full px-2 py-1'
+        hx-get="{% url 'inbox:inbox-newreply' conversation.id %}"
+        hx-target="this"
+        hx-swap="outerHTML scroll:#conversation:bototm">
+        <svg class='h-6 object-cover rounded-full mb-1' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 17V15.8C20 14.1198 20 13.2798 19.673 12.638C19.3854 12.0735 18.9265 11.6146 18.362 11.327C17.7202 11 16.8802 11 15.2 11H4M4 11L8 7M4 11L8 15" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg> 
+        <div class='text-white rounded-full mb-0.5'>Reply</div>
+        </a>
+    </div>
+    {% else %}
+    <div class='h-full flex items-center justify-center text-gray-500 -mt-6 text-center p-10'>
+    Select a conversation or create a new message
+    </div>
+    {% endif %}
+
+
+</div>

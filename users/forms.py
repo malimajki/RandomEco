@@ -8,13 +8,24 @@ from .models import *
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user']
+        exclude = ['user','email']
+        labels = {
+            'image': 'Avatar',
+            'first_name': 'Jméno',
+            'last_name': 'Přijímení',
+            'phone': 'Telefon',
+            'city': 'Město',
+            'street': 'Ulice',
+            'zip': 'Psč',
+        }
         widgets = {
-            'image': forms.FileInput(),
-            'phone' : forms.TextInput(attrs={'placeholder': '123456789', 'class': "!text-sm"}),
-            'city' : forms.TextInput(attrs={'placeholder': 'Brno', 'class': "!text-sm"}),
-            'street' : forms.TextInput(attrs={'placeholder': 'Marianské náměstí 18', 'class': "!text-sm"}),
-            'zip' : forms.TextInput(attrs={'placeholder': '637 12', 'class': "!text-sm"}),
+            'image': forms.FileInput(attrs={'class':"bg-blue-200 rounded-xl mb-2 mx-auto flex"}),
+            'first_name' : forms.TextInput(attrs={'class':"bg-blue-200 rounded-xl px-2 py-1 mx-auto text-center mb-2 flex"}),
+            'last_name' : forms.TextInput(attrs={'class':"bg-blue-200 rounded-xl px-2 py-1 mx-auto text-center mb-2 flex"}),
+            'phone' : forms.TextInput(attrs={'class':"bg-blue-200 rounded-xl px-2 py-1 mx-auto text-center mb-2 flex"}),
+            'city' : forms.TextInput(attrs={'class':"bg-blue-200 rounded-xl px-2 py-1 mx-auto text-center mb-2 flex"}),
+            'street' : forms.TextInput(attrs={'class':"bg-blue-200 rounded-xl px-2 py-1 mx-auto text-center mb-2 flex"}),
+            'zip' : forms.TextInput(attrs={'class':"bg-blue-200 rounded-xl px-2 py-1 mx-auto text-center mb-2 flex"}),
         }
 
 class SignUpForm(UserCreationForm):

@@ -1,0 +1,52 @@
+{% extends "layouts/profile.html" %}
+{% load static %}
+
+{% block content %}
+<inbox class='grid grid-cols-5 sm:grid-cols-4 h-[calc(100vh-8rem)] md:h-[calc(100vh-12rem)] shadow-2xl rounded-2xl mx-3'>
+    <div x-data='{modal_open: false}' class='cols-span-1 bg-slate-100 rounded-l-2xl p-2 overflow-y-auto'>
+        
+        <div class='p-0 sm:p-5 mb-3 sticky top-0 z-10'>
+            <a @click='modal_open = true' class='flex cursor-pointer items-center justify-center h-14 sm:h-16 gap-2 bg-blue-500 rounded-full'>
+                <svg class='h-6 m-auto lg:m-0' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M19.186 2.09c.521.25 1.136.612 1.625 1.101.49.49.852 1.104 1.1 1.625.313.654.11 1.408-.401 1.92l-7.214 7.213c-.31.31-.688.541-1.105.675l-4.222 1.353a.75.75 0 0 1-.943-.944l1.353-4.221a2.75 2.75 0 0 1 .674-1.105l7.214-7.214c.512-.512 1.266-.714 1.92-.402zm.211 2.516a3.608 3.608 0 0 0-.828-.586l-6.994 6.994a1.002 1.002 0 0 0-.178.241L9.9 14.102l2.846-1.496c.09-.047.171-.107.242-.178l6.994-6.994a3.61 3.61 0 0 0-.586-.828zM4.999 5.5A.5.5 0 0 1 5.47 5l5.53.005a1 1 0 0 0 0-2L5.5 3A2.5 2.5 0 0 0 3 5.5v12.577c0 .76.082 1.185.319 1.627.224.419.558.754.977.978.442.236.866.318 1.627.318h12.154c.76 0 1.185-.082 1.627-.318.42-.224.754-.559.978-.978.236-.442.318-.866.318-1.627V13a1 1 0 1 0-2 0v5.077c0 .459-.021.571-.082.684a.364.364 0 0 1-.157.157c-.113.06-.225.082-.684.082H5.923c-.459 0-.57-.022-.684-.082a.363.363 0 0 1-.157-.157c-.06-.113-.082-.225-.082-.684V5.5z" fill="#ffffff"/>
+                </svg>
+                <div class='hidden lg:block text-white rounded-full font-bold '>New Message</div>
+            </a>
+        </div>
+        
+        <div x-show='modal_open' x-cloak class='relative z-50' aria-labelledby='modal-title' role='dialog'>
+            <div class='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity'></div>
+            <div class='fixed inset-0 z-10 w-screen overflow-y-auto'>
+                <div class='flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0'>
+                    <div class='relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-[500px]'>
+                        <div @click.away='modal_open = false' class='bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4'>
+
+                            {% include "a_inbox/form_searchuser.html" %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% include "a_inbox/my_conversations.html" %}
+
+    </div>
+
+
+    {% include "a_inbox/conversation.html" %}
+
+</inbox>
+
+{% endblock  %}
+
+<script>
+    function scrollToBottom() {
+        const container = document.getElementById('conversation');
+        container.scrollTop = container.scrollHeight;
+    }
+
+    windows.onload = function(){
+        scrollToBottom
+    };
+</script>

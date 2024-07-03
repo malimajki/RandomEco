@@ -64,10 +64,7 @@ def profile_edit_view(request):
         if form.is_valid():
             form.save()
  
-    if request.path == reverse('profile_onboarding'):
-        template = 'users/profile_onboarding.html'
-    else:
-        template = 'users/profile_edit.html'
+    template = 'users/profile_edit.html'
          
     return render(request, template, {'form':form})
 

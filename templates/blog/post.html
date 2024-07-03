@@ -1,0 +1,28 @@
+<article class="card rounded-2xl p-6 h-[300px]">
+    <div class="grid felx xl:grid-cols-5 gap-5 items-center mb-5 h-[250px]">
+        <img src={{ post.image.url }} alt="" class="flex w-full xl:col-span-2 rounded-xl">
+        <div class="xl:col-span-3">
+            <a href={% url 'blog:post' post.id %}> <h3 class="semibold mb-1"> {{ post.title }} </h3> </a>
+            <div class="flex flex-row">
+                {% for tag in post.tags.all %}
+                <a href="#" class="mb-1 text-sm mr-1 px-2 bg-gray-200 rounded-full hover:bg-gray-800 hover:text-white">{{ tag }} </a>
+                {% endfor %}
+            </div>
+            <p class="mb-1">{{ post.body|slice:":200"|safe }}...</p>
+            <p class="text-sm"> {{ post.created|date:"d. m, Y" }} </p>
+            <div class="text-right -mt-8">
+                <a href={% url 'blog:post' post.id %} class="bg-gray-200 p-2 rounded-full">Read More</a>
+            </div>
+        </div>
+    </div>
+    <hr class="">
+    <div class="flex items-center justify-between text-sm px-2 mt-2">
+        <p class="font-bold">
+            Comments
+            <span class="font-light text-gray-500 ml-1">{{ post.comments.count }}</span>
+        </p>
+        <div class="flex items-center gap-4 [&>a:hover]:underline">
+            {% include "snippets/likes.html" %}
+        </div>
+    </div>   
+</article>

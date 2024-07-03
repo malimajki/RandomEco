@@ -109,7 +109,7 @@ def comment_delete_view(request, pk):
         messages.success(request, 'Comment deleted')
         return redirect('post', post.parent_post.id )
         
-    return render(request, 'a_blog/comment_delete.html', {'comment' : post})
+    return render(request, 'blog/comment_delete.html', {'comment' : post})
 
 
 @login_required
@@ -121,7 +121,7 @@ def reply_delete_view(request, pk):
         messages.success(request, 'Reply deleted')
         return redirect('post', reply.parent_comment.parent_post.id )
         
-    return render(request, 'a_blog/reply_delete.html', {'reply' : reply})
+    return render(request, 'blog/reply_delete.html', {'reply' : reply})
 
 
 def like_toggle(model):

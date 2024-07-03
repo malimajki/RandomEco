@@ -45,13 +45,13 @@
             <li><a>Item 3</a></li>
             </ul>
         </div>
-        <a href="{% url 'home' %}"  class="cursor-pointer">
+        <a href="{% url 'home' %}"  class="cursor-pointer ml-4">
           <img class="max-w-[200px]" src="{% static 'img/logo-no-background.png' %}" />
         </a>
         </div>
         <div class="navbar-center hidden lg:flex">
           <ul class="menu menu-horizontal px-1">
-              <li><a class="text-2xl" href="{% url 'home' %}">Blog</a></li>
+              <li><a class="text-2xl" href="{% url 'blog:home' %}">Blog</a></li>
               <li><a class="text-2xl" href="{% url 'shop:home' %}">E-shop</a></li>
               {% comment %} <li>
               <details>
@@ -91,9 +91,11 @@
           </div>
           <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
             <li>
-              <a class="justify-between">
+              <a href="{% url 'profile:profile' %}" class="justify-between">
                 Profile
-                <span class="badge">New</span>
+              </a>
+              <a href="{% url 'profile:profile-edit' %}" class="justify-between">
+                Edit profile
               </a>
             </li>
             <li><a>Settings</a></li>

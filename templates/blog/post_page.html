@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block pagename %}
+ | {{ post.title }}
+{% endblock pagename %}
+
+{% block content %}
+
+<div class="text-sm breadcrumbs my-5">
+    <ul class="place-content-center">
+        <li>
+            <a href="{% url 'home' %}">Home</a>
+        </li> 
+        <li>
+            <a href="{% url 'blog:home' %}">Blog</a>
+        </li> 
+        <li>
+            <a href="{% url 'blog:home' %}?category={{ post.category.slug }}">{{ post.category.name|upper }}</a>
+        </li> 
+        <li>
+            <p> {{ post.title|upper }}</p>
+        </li> 
+    </ul>
+</div>
+
+<article class="card rounded-2xl p-6 max-w-[60%] mx-auto">
+    <div class="grid felx  gap-2 items-center mb-5">
+        <img href="#" src="{{ post.image.url }}" alt="thumbnail" class="flex w-full  rounded-xl">
+        <h3 class="semibold mb-1">{{ post.title }}</h3>
+        <p class="mb-1">{{ post.body|safe }}</p>
+        <p class="text-sm"> {{ post.created|date:"d. m, Y" }} </p>
+    </div>
+    <hr class="">
+    <div class="flex items-center justify-between text-sm px-2 mt-2">
+        <a class="font-bold hover:underline" href="">
+            Comments
+            <span id="commentscount-{{ post.id }}" class="font-light text-gray-500 ml-1">{{ post.comments.count }}</span>
+        </a>
+        {% include "snippets/likes.html" %}
+    </div>   
+</article>
+
+{% if user.is_authenticated %}
+<div class="card !pb-0 -mt-3 max-w-[60%] mx-auto">
+    <form class="flex justify-between items-center p-4" autocomplete="off"
+    hx-post="{% url 'blog:comment-sent' post.id %}" 
+    hx-target="#tab-contents" 
+    hx-swap="afterbegin"
+    _="on htmx:afterRequest reset() me" >
+        {% csrf_token %}
+        <div class="w-full">
+            {{ commentform }}
+        </div>
+        <button @click="open = false" class="block ml-2" type="submit">Submit</button>
+    </form>
+</div>
+{% endif %}
+
+<div class="mb-20 max-w-[60%] mx-auto">
+    <div id="tabs" class="ml-4 flex gap-1 mb-4 {% if not post.comments.count %}hidden{% endif %}" hx-target="#tab-contents" hx-swap="innerHTML"
+    _="on htmx:afterOnLoad take .selected for event.target">
+        <a hx-get="{% url 'blog:post' post.id %}" class="tab selected">Newest First</a> 
+        <a hx-get="{% url 'blog:post' post.id %}?top" class="tab">Top Comments</a>
+    </div>
+    <div id="tab-contents">
+        {% for comment in post.comments.all %}
+        {% include 'blog/comment.html' %}
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock  %}

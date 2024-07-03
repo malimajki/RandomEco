@@ -1,3 +1,10 @@
+[x-cloak] { display: none; }
+
+:root {
+    --hover: rgb(100,110,228);
+  }
+
+
 .card {
     display: flex;
     flex-direction: column;
@@ -6,7 +13,7 @@
     border-radius: 1rem;
     box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
-    background-color: rgb(107, 89, 89);
+    background-color: rgb(114, 110, 110);
     padding-bottom: 1rem;
     width: 100%;
 }

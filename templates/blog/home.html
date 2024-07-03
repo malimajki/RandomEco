@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block pagename %}
+ | BLOG
+{% endblock pagename %}
+
+{% block content %}
+<!-- SUBNAV -->
+<div class="text-sm breadcrumbs my-5">
+    <ul class="place-content-center">
+        <li>
+            <a href="{% url 'home' %}">Home</a>
+        </li> 
+        <li>
+            <a href="{% url 'blog:home' %}">Blog</a>
+        </li> 
+    </ul>
+</div>
+<div class="fixed top-26 left-4 max-w-[400px]">
+    {% include "blog/sidebar.html" %}
+</div>
+<div class="mt-6">
+    {% for post in page_obj %}
+    <div class="flex flex-col justify-center mx-auto max-w-[60%] my-4 pb-2">
+        <div class="lg:card-side bg-base-200 shadow-xl flex pl-2 rounded-t-2xl ">
+            <div class="mt-8">
+                <img class="rounded-xl" src="{{ post.image.url }}" alt="Album" />
+            </div>
+            <div class="card-body">
+                <h2 class="card-title text-2xl">{{ post.title }}</h2>
+                <h2 class="card-title text-sm">{{ post.category.name }}</h2>
+                <p>{{ post.body }}</p>
+                <p>{{ post.created|date:"j. n. Y" }}</p>
+                <div class="card-actions justify-end">
+                    <a href="{% url 'blog:post' post.id %}" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row items-center justify-between bg-base-200 text-sm px-6 py-2 rounded-b-2xl">
+            <p class="font-bold">
+                Comments
+                <span class="font-light text-gray-500 ml-1">{{ post.comments.count }}</span>
+            </p>
+            <div class="flex items-center gap-4 [&>a:hover]:underline">
+                {% include "snippets/likes.html" %}
+            </div>
+        </div>   
+    </div>
+    {% endfor %}
+
+    <nav class="flex justify-center">
+        {% if page_obj.has_previous %}
+        <a class="px-2 py-0.5 rounded-full mx-1 bg-gray-400 hover:bg-gray-800 hover:text-white" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}  
+        <a href="#" class="px-2 py-0.5 rounded-full mx-1 bg-gray-400 hover:bg-gray-800 hover:text-white">{{ page_obj.number }}</a>
+        {% if page_obj.has_next %}
+        <a class="px-2 py-0.5 rounded-full mx-1 bg-gray-400 hover:bg-gray-800 hover:text-white" href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %} 
+    </nav>
+</div>
+
+{% endblock  %}

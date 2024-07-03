@@ -1,6 +1,6 @@
 {% load static %}
 <div class=" card sticky top-[100px] space-y-2 px-4 py-4 relative">
-    <h2 class="text-2xl">Cart</h2>
+    <h2 class="text-2xl text-black text-semibold pb-4">Cart</h2>
     <div class="absolute top-2 right-14">
         <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
@@ -10,7 +10,9 @@
         {{ total_items }}</div>
     <ul class="border-t-2">
         {% for item in cart.items.all %}
-            <li class="flex w-full items-center justify-between my-2 pb-2 border-b-2 border-blue-800">
+            <li x-data="{ open: localStorage.getItem('open-{{ item.id }}') === 'true' }"
+                x-init="$watch('open', value => localStorage.setItem('open-{{ item.id }}', value))" 
+                class="relative flex w-full items-center justify-between my-2 pb-2 border-b-2 border-blue-800">
                 <div class="flex flex-row">
                     <div class="max-w-[100px]">
                         {% if product.image %}
@@ -29,16 +31,17 @@
                         </div>
                     </div>
                     <div class="pl-4 flex flex-col text-center">
-                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-auto rounded-full bg-primary text-black cursor-pointer">
+                        <svg x-on:click="open = ! open" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-auto rounded-full bg-primary text-black cursor-pointer hover:bg-indigo-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                           </svg>
-                          
                         <p class="pl-2 text-red-600"> {{item.subtotal}},- </p>
                     </div> 
-                    
                 </div>
-                <div class="flex items-center hidden">
-                    <button class="bg-green-500 text-black px-2.5 py-1 rounded-full hover:bg-green-700" 
+                <div x-show="open" x-cloak x-transition class="absolute top-1.5 right-16 flex items-center bg-primary rounded-full px-2 py-1.5">
+                    <div class="bg-white text-black px-2.5 py-1 rounded-full hover:bg-green-700">
+                        {{ item.quantity }}
+                    </div>
+                    <button class="bg-green-500 text-black px-2.5 py-1 ml-2 rounded-full hover:bg-green-700" 
                             hx-post="{% url 'shop:update_cart' item.id %}" 
                             hx-vals='{"action":"increment"}' 
                             hx-target="#cart" 
@@ -68,7 +71,9 @@
             <li>Your cart is empty.</li>
         {% endfor %}
     </ul>
-    <p class="text-lg font-bold mt-4">Total price: {{ total_price }}</p>
-    <a href="{% url 'shop:checkout' %}" class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 inline-block mt-10">Checkout</a>
+    <div class="flex justify-between mt-4 mx-1">
+        <p class="text-lg font-bold">Total price:</p>
+        <p class="text-lg font-bold">{{ total_price }},-</p>
+    </div>
+    <a href="{% url 'shop:checkout' %}" class="text-black font-bold bg-primary px-4 py-2 hover:bg-indigo-500 transition duration-150 rounded-xl inline-block mt-10">Checkout</a>
 </div>
-
