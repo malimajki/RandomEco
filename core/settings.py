@@ -7,6 +7,8 @@ SECRET_KEY = "django-insecure-wz1r$3adj+-#inm+0fg9s&8aa&4y!lm(c7%8d2i_(^(547--w7
 
 DEBUG = True
 
+SESSION_COOKIE_AGE = 86400
+
 ALLOWED_HOSTS = []
 
 SITE_ID = 1
@@ -45,6 +47,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -61,7 +64,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'django.template.context_processors.request',
-                'shop.utils.context_processors.cart_context'
+                'shop.utils.context_processors.cart_context',
             ],
         },
     },
