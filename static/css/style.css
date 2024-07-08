@@ -4,7 +4,6 @@
     --hover: rgb(100,110,228);
   }
 
-
 .card {
     display: flex;
     flex-direction: column;

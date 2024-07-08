@@ -1,26 +1,9 @@
+{% load static %}
+
 {% block links %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" rel="stylesheet">
-<style>
-    .noUi-base .noUi-connect {
-        background-color: #81DDBE;
-    }
-    .noUi-base .noUi-handle {
-        border-radius: 50%;
-        box-shadow: none;
-        width: 20px;
-        height: 20px;
-        top: -5px;
-        background: #4A90E2;
-    }
-    .noUi-handle::after, .noUi-handle::before{
-        display: none;
-    }
-    .noUi-target, .noUi-lower, .noUi-connect, .noUi-horizontal {
-        height: 10px;
-        background: transparent;
-    }
-</style>
+<link href="{% static 'css/nouislider.min.css' %}" rel="stylesheet">
 {% endblock %}
+
 <aside  x-show="mobileSidebarOpen" x-cloak class="md:!block sticky top-[100px] mb-8"
             x-transition:enter="duration-300 ease-out"
             x-transition:enter-start="opacity-0 -mt-96"
@@ -29,7 +12,17 @@
         <h2 class="text-2xl text-black text-semibold pb-4">Search</h2>
         <form class="pb-5" action="." method="get">
             <div class="flex">
-                <input type="text" name="shop_search" class="p-4 bg-gray-100 border-0 rounded-l-xl" placeholder="Search...">
+                <input type="text" name="shop_search" class="p-4 bg-gray-100 border-0 rounded-l-xl" placeholder= "Search..."
+                value="{% if request.GET.shop_search %}{{ request.GET.shop_search }}{% endif %}">
+                {% if request.GET.category %}
+                    <input type="hidden" name="category" value="{{ request.GET.category }}">
+                {% endif %}
+                {% if request.GET.min_price %}
+                    <input type="hidden" name="min_price" value="{{ request.GET.min_price }}">
+                {% endif %}
+                {% if request.GET.max_price %}
+                    <input type="hidden" name="max_price" value="{{ request.GET.max_price }}">
+                {% endif %}
                 <button class="p-4 bg-primary hover:bg-indigo-500 border-0 rounded-r-xl text-black">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -42,15 +35,15 @@
         <h2 class="text-2xl text-black text-semibold pb-4">Categories</h2>
         <ul class="space-y-2 rounded-md">
             <li>
-                <a href="{% url 'shop:home' %}" 
-                class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl 
+                <a href="{% url 'shop:home' %}?category={{ category.slug }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.shop_search %}&shop_search={{ request.GET.shop_search }}{% endif %}" 
+                class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl
                 {% if not active_category %}bg-primary{% endif %}">
                     <span class="text-black font-bold text-sm">All categories</span> 
                 </a>
             </li>
             {% for category in categories %}
             <li>
-                <a href="{% url 'shop:home' %}?category={{ category.slug }}" 
+                <a href="{% url 'shop:home' %}?category={{ category.slug }}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.shop_search %}&shop_search={{ request.GET.shop_search }}{% endif %}" 
                 class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl  
                 {% if category.slug == active_category %}bg-primary{% endif %}">
                     <span class="text-black font-bold text-sm">{{ category.name }}</span>
@@ -61,23 +54,30 @@
     </section>
     <section class="card p-4">
         <h2 class="text-2xl text-black text-semibold pb-4">Cena</h2>
-            <div class="mb-4 mr-2 relative">
+            <div class="mb-4 relative">
                 <form method="get" action="{% url 'shop:home' %}"> 
-                    <label for="slider" class="block mb-2 text-sm font-medium text-gray-700">Select Range</label>
-                    <div id="slider" class="mb-4"></div>
+                    <div id="slider" class="mb-4 mr-4"></div>
                     <div class="flex justify-between">
                         <input type="number" id="minInput" min="0" max="{{ max_value }}" name="min_price" value="{{ min_price }}" class="w-24 p-2 border rounded bg-white text-black">
                         <input type="number" id="maxInput" min="0" max="{{ max_value }}" name="max_price" value="{{ max_price }}" class="w-24 p-2 border rounded bg-white text-black">
                     </div>
                     <input class="bg-primary cursor-pointer rounded-xl px-2 py-1 mt-4 text-black font-semibold hover:bg-indigo-500" type="submit" value="Apply Filter">
+                    {% if request.GET.category %}
+                        <input type="hidden" name="category" value="{{ request.GET.category }}">
+                    {% endif %}
+                    {% if request.GET.shop_search %}
+                        <input type="hidden" name="shop_search" value="{{ request.GET.shop_search }}">
+                    {% endif %}
                 </form>
-                <a class="absolute right-0 bottom-0 bg-error cursor-pointer rounded-xl px-2 py-1 mt-4 text-black font-semibold hover:bg-red-700" type="submit">Zrušit filtr</a>
+                <a 
+               href="{% url 'shop:home' %}?{% if request.GET.category %}category={{ request.GET.category }}{% endif %}{% if request.GET.shop_search %}&shop_search={{ request.GET.shop_search }}{% endif %}"
+                class="absolute right-0 bottom-0 bg-error cursor-pointer rounded-xl px-2 py-1 mt-4 text-black font-semibold hover:bg-red-700">Zrušit filtr</a>
             </div>
     </section>
 </aside>
 
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
+<script src="{% static 'js/nouislider.min.js' %}"></script>
 <script>
     const slider = document.getElementById('slider');
     const minInput = document.getElementById('minInput');

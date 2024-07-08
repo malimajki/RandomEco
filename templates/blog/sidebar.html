@@ -9,6 +9,9 @@ x-transition:enter-end="opacity-100 mt-0">
         <form class="pb-5" action="." method="get">
             <div class="flex">
                 <input type="text" name="blog_search" class="p-4 bg-gray-100 border-0 rounded-l-xl" placeholder="Search...">
+                {% if request.GET.category %}
+                    <input type="hidden" name="category" value="{{ request.GET.category }}">
+                {% endif %}
                 <button class="p-4 bg-primary hover:bg-indigo-500 border-0 rounded-r-xl text-black">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -21,13 +24,15 @@ x-transition:enter-end="opacity-100 mt-0">
         <h2 class="text-2xl text-black text-semibold pb-4">Categories</h2>
         <ul class="space-y-2 rounded-md">
             <li>
-                <a href="{% url 'blog:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl {% if not active_category %}bg-primary{% endif %}">
+                <a href="{% url 'blog:home' %}?category={{ category.slug }}{% if request.GET.blog_search %}&blog_search={{ request.GET.blog_search }}{% endif %}" 
+                class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl {% if not active_category %}bg-primary{% endif %}">
                     <span class="text-black font-bold text-sm">All categories</span> 
                 </a>
             </li>
             {% for category in categories %}
             <li>
-                <a href="{% url 'blog:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl  {% if category.slug == active_category %}bg-primary{% endif %}">
+                <a href="{% url 'blog:home' %}?category={{ category.slug }}{% if request.GET.blog_search %}&blog_search={{ request.GET.blog_search }}{% endif %}" 
+                class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl  {% if category.slug == active_category %}bg-primary{% endif %}">
                     <span class="text-black font-bold text-sm">{{ category.name }}</span>
                 </a>
             </li>
