@@ -15,6 +15,7 @@ urlpatterns = [
     path("inbox/", include('inbox.urls', namespace='inbox')),
     path("dashboard/", include('dashboard.urls' ,namespace='dashboard')),
     path("profile/", include('users.urls' ,namespace='profile')),
+    path('summernote/', include('django_summernote.urls')),
 ]
 
 if settings.DEBUG:

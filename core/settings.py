@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     "django_htmx",
+    'django_summernote',
     'rest_framework',
     'allauth',
     'allauth.account',

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ object.title }}</h1>
+  <img src="{{ object.image.url }}" alt="{{ object.title }}">
+  <p>{{ object.body }}</p>
+  <p>Category: {{ object.category }}</p>
+  <p>Public: {{ object.public }}</p>
+  <p>Created: {{ object.created }}</p>
+  <a href="{% url 'dashboard:post_update' object.pk %}">Edit</a>
+  <a href="{% url 'dashboard:post_delete' object.pk %}">Delete</a>
+  <a href="{% url 'dashboard:post_list' %}">Back to list</a>
+{% endblock %}
