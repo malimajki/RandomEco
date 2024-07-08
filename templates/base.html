@@ -23,7 +23,9 @@
           document.addEventListener('htmx:configRequest', (event) => {
               event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
           });
-      </script>
+        </script>
+        {% block links %}
+        {% endblock %}
     </head>
     <body>
 <!-- NAVBAR -->

@@ -1,3 +1,26 @@
+{% block links %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" rel="stylesheet">
+<style>
+    .noUi-base .noUi-connect {
+        background-color: #81DDBE;
+    }
+    .noUi-base .noUi-handle {
+        border-radius: 50%;
+        box-shadow: none;
+        width: 20px;
+        height: 20px;
+        top: -5px;
+        background: #4A90E2;
+    }
+    .noUi-handle::after, .noUi-handle::before{
+        display: none;
+    }
+    .noUi-target, .noUi-lower, .noUi-connect, .noUi-horizontal {
+        height: 10px;
+        background: transparent;
+    }
+</style>
+{% endblock %}
 <aside  x-show="mobileSidebarOpen" x-cloak class="md:!block sticky top-[100px] mb-8"
             x-transition:enter="duration-300 ease-out"
             x-transition:enter-start="opacity-0 -mt-96"
@@ -19,13 +42,17 @@
         <h2 class="text-2xl text-black text-semibold pb-4">Categories</h2>
         <ul class="space-y-2 rounded-md">
             <li>
-                <a href="{% url 'shop:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl {% if not active_category %}bg-primary{% endif %}">
+                <a href="{% url 'shop:home' %}" 
+                class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl 
+                {% if not active_category %}bg-primary{% endif %}">
                     <span class="text-black font-bold text-sm">All categories</span> 
                 </a>
             </li>
             {% for category in categories %}
             <li>
-                <a href="{% url 'shop:home' %}?category={{ category.slug }}" class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl  {% if category.slug == active_category %}bg-primary{% endif %}">
+                <a href="{% url 'shop:home' %}?category={{ category.slug }}" 
+                class="flex items-center p-2 hover:bg-indigo-500 transition duration-150 rounded-xl  
+                {% if category.slug == active_category %}bg-primary{% endif %}">
                     <span class="text-black font-bold text-sm">{{ category.name }}</span>
                 </a>
             </li>
@@ -34,135 +61,76 @@
     </section>
     <section class="card p-4">
         <h2 class="text-2xl text-black text-semibold pb-4">Cena</h2>
-        <div class="slider h-1 relative bg-blue-400 rounded-full mt-3">
-            <div class="progress h-full left-0 right-0 absolute rounded-full bg-blue-400"></div>
-        </div>
-        <div class="range-input relative mb-2">
-            <input type="range" class="range-min absolute w-full h-1 -top-[4px] -left-2 bg-transparent pointer-events-none" min="0" max="{{ max_value }}" value="0" step="10">
-            <input type="range" class="range-max absolute w-full h-1 -top-[4px] -right-2 bg-transparent pointer-events-none" min="0" max="{{ max_value }}" value="{{ max_value }}" step="10">
-        </div>
-        <div class="price-input w-full flex mx-auto my-10">
-            <div class="field">
-                <input type="number" class="bg-white text-black input-min" value="0">
-            </div>  
-            <div class="field">
-                <input type="number" class="bg-white text-black input-max" value="{{ max_value }}">
+            <div class="mb-4 mr-2 relative">
+                <form method="get" action="{% url 'shop:home' %}"> 
+                    <label for="slider" class="block mb-2 text-sm font-medium text-gray-700">Select Range</label>
+                    <div id="slider" class="mb-4"></div>
+                    <div class="flex justify-between">
+                        <input type="number" id="minInput" min="0" max="{{ max_value }}" name="min_price" value="{{ min_price }}" class="w-24 p-2 border rounded bg-white text-black">
+                        <input type="number" id="maxInput" min="0" max="{{ max_value }}" name="max_price" value="{{ max_price }}" class="w-24 p-2 border rounded bg-white text-black">
+                    </div>
+                    <input class="bg-primary cursor-pointer rounded-xl px-2 py-1 mt-4 text-black font-semibold hover:bg-indigo-500" type="submit" value="Apply Filter">
+                </form>
+                <a class="absolute right-0 bottom-0 bg-error cursor-pointer rounded-xl px-2 py-1 mt-4 text-black font-semibold hover:bg-red-700" type="submit">Zrušit filtr</a>
             </div>
-        </div>
     </section>
 </aside>
 
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
 <script>
-    const rangeInput = document.querySelectorAll(".range-input input"),
-    priceInput = document.querySelectorAll(".price-input input"),
-    range = document.querySelector(".slider .progress");
-    let priceGap = 10;
+    const slider = document.getElementById('slider');
+    const minInput = document.getElementById('minInput');
+    const maxInput = document.getElementById('maxInput');
 
-    priceInput.forEach(input =>{
-        input.addEventListener("input", e =>{
-            let minPrice = parseInt(priceInput[0].value),
-            maxPrice = parseInt(priceInput[1].value);
-            
-            if((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max){
-                if(e.target.className === "input-min"){
-                    rangeInput[0].value = minPrice;
-                    range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
-                }else{
-                    rangeInput[1].value = maxPrice;
-                    range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
-                }
-            }
-        });
+    noUiSlider.create(slider, {
+        start: [{{ min_price }}, {{ max_price }}],
+        connect: true,
+        range: {
+            'min': 0,
+            'max': {{ max_value }}
+        },
+        step: 10
     });
 
-    rangeInput.forEach(input =>{
-        input.addEventListener("input", e =>{
-            let minVal = parseInt(rangeInput[0].value),
-            maxVal = parseInt(rangeInput[1].value);
-
-            if((maxVal - minVal) < priceGap){
-                if(e.target.className === "range-min"){
-                    rangeInput[0].value = maxVal - priceGap
-                }else{
-                    rangeInput[1].value = minVal + priceGap;
-                }
-            }else{
-                priceInput[0].value = minVal;
-                priceInput[1].value = maxVal;
-                range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
-                range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-            }
-        });
+    slider.noUiSlider.on('update', function(values, handle) {
+        if (handle === 0) {
+            minInput.value = Math.round(values[0]);
+        } else {
+            maxInput.value = Math.round(values[1]);
+        }
     });
 
+    function updateSliderFromInputs() {
+        let minValue = parseInt(minInput.value);
+        let maxValue = parseInt(maxInput.value);
+        
+        if (minValue > maxValue) {
+            minValue = maxValue;
+            minInput.value = minValue;
+        }
+        
+        if (maxValue < minValue) {
+            maxValue = minValue;
+            maxInput.value = maxValue;
+        }
+
+        slider.noUiSlider.set([minValue, maxValue]);
+    }
+
+    minInput.addEventListener('change', updateSliderFromInputs);
+    maxInput.addEventListener('change', updateSliderFromInputs);
+
+    minInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            updateSliderFromInputs();
+        }
+    });
+
+    maxInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            updateSliderFromInputs();
+        }
+    });
 </script>
 {% endblock %}
-
-<!-- <div class="slider h-1 relative bg-blue-400 rounded-full mt-3">
-    <div class="progress h-full left-0 right-0 absolute rounded-full bg-blue-400"></div>
-</div>
-<div class="range-input relative mb-2">
-    <input type="range" class="range-min absolute w-full h-1 -top-[4px] -left-2 bg-transparent" min="0" max="{{ max_value }}" value="0" step="10">
-    <input type="range" class="range-max absolute w-full h-1 -top-[4px] -right-2 bg-transparent" min="0" max="{{ max_value }}" value="{{ max_value }}" step="10">
-</div>
-<div class="price-input w-full flex mx-auto my-10">
-    <div class="field">
-        <input type="number" class="bg-white text-black input-min" value="0">
-    </div>
-    <div class="field">
-        <input type="number" class="bg-white text-black input-max" value="{{ max_value }}">
-    </div>
-</div>
-
-<script>
-    const rangeInputs = document.querySelectorAll(".range-input input"),
-        priceInputs = document.querySelectorAll(".price-input input"),
-        progress = document.querySelector(".slider .progress");
-    const priceGap = 10;
-
-    function updateProgress() {
-        const minVal = parseInt(rangeInputs[0].value);
-        const maxVal = parseInt(rangeInputs[1].value);
-        progress.style.left = (minVal / rangeInputs[0].max) * 100 + "%";
-        progress.style.right = 100 - (maxVal / rangeInputs[1].max) * 100 + "%";
-    }
-
-    function handlePriceInput(e) {
-        const minPrice = parseInt(priceInputs[0].value);
-        const maxPrice = parseInt(priceInputs[1].value);
-
-        if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInputs[1].max) {
-            if (e.target.classList.contains("input-min")) {
-                rangeInputs[0].value = minPrice;
-                updateProgress();
-            } else if (e.target.classList.contains("input-max")) {
-                rangeInputs[1].value = maxPrice;
-                updateProgress();
-            }
-        }
-    }
-
-    function handleRangeInput(e) {
-        let minVal = parseInt(rangeInputs[0].value);
-        let maxVal = parseInt(rangeInputs[1].value);
-
-        if ((maxVal - minVal) >= priceGap) {
-            priceInputs[0].value = minVal;
-            priceInputs[1].value = maxVal;
-            updateProgress();
-        } else {
-            if (e.target.classList.contains("range-min")) {
-                rangeInputs[0].value = maxVal - priceGap;
-            } else if (e.target.classList.contains("range-max")) {
-                rangeInputs[1].value = minVal + priceGap;
-            }
-        }
-    }
-
-    priceInputs.forEach(input => input.addEventListener("input", handlePriceInput));
-    rangeInputs.forEach(input => input.addEventListener("input", handleRangeInput));
-
-    // Initialize the progress bar on page load
-    updateProgress();
-</script> -->

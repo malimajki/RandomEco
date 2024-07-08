@@ -6,8 +6,26 @@ from .models import Product, Category, Review, Order, OrderItem, CartItem
 
 
 def shop(request):
+    min_price = request.GET.get('min_price', None)
+    max_price = request.GET.get('max_price', None)
+
+    # Convert to integers if not empty strings, otherwise use default values
+    try:
+        min_price = int(min_price) if min_price != '' and min_price is not None else 0
+    except ValueError:
+        min_price = 0
+
+    try:
+        max_price = int(max_price) if max_price != '' and max_price is not None else Product.objects.all().aggregate(Max('price'))['price__max']
+    except ValueError:
+        max_price = Product.objects.all().aggregate(Max('price'))['price__max']
+
+    max_value = Product.objects.aggregate(max_value=Max('price'))['max_value']
+
     categories = Category.objects.all()
     products = Product.objects.all()
+    
+    products = Product.objects.filter(price__gte=min_price, price__lte=max_price)
 
     active_category = request.GET.get("category", "")
 
@@ -17,15 +35,15 @@ def shop(request):
     query = request.GET.get("shop_search", "")
 
     if query:
-        products= products.filter(Q(name__icontains=query | Q(descripotion__icontains=query)))
-
-    max_value = Product.objects.aggregate(max_value=Max("price"))["max_value"]
-
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        
     context = {
         "categories":categories,
         "products":products,
         'active_category':active_category,
-        'max_value':max_value
+        'max_value':max_value,
+        'min_price': min_price,
+        'max_price': max_price,
     }
 
     return render(request, "shop/home.html", context)    
