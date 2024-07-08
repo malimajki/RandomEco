@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-wz1r$3adj+-#inm+0fg9s&8aa&4y!lm(c7%8d2i_(^(547--w7"
 
+# key for encrypting messages in the inbox app
 ENCRYPT_KEY = b'wtZ2ejmmIAirhXhZKpqNchEb-thIi2A1B2xDD45S3gM='
 
 DEBUG = True
@@ -32,6 +33,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
 
     "home",
     "blog",
@@ -130,15 +132,38 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_ADAPTER = 'users.adapters.MyAccountAdapter'
+
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
-        }
+     'facebook': {
+        'METHOD': 'oauth2',
+        'SCOPE': [
+            'email',
+            'public_profile',
+        ],
+        'AUTH_PARAMS': {
+            'auth_type': 'reauthenticate'
+        },
+        'FIELDS': [
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'en_US',
+        'VERIFIED_EMAIL': True,
+        'VERSION': 'v7.0'
+    },
+    'github': {
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
     }
 }

@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.db.models import Count
 from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.models import User
 from allauth.account.utils import send_email_confirmation
 from .forms import ProfileForm, SignUpForm
-from django.contrib.auth.views import LoginView
 from shop.models import Order
 
 def signup(request):
