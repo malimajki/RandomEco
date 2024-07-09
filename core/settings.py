@@ -32,8 +32,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
 
     "home",
     "blog",
@@ -85,11 +83,32 @@ AUTHENTICATION_BACKENDS = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+
+    'default': {
+
+        'ENGINE': 'django.db.backends.postgresql',
+
+        'NAME': "postgres",
+
+        'USER': 'postgres.arplphdqwavgakmzihzw',
+
+        'PASSWORD': '7TqJrBMFrMpMJFeL',
+
+        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
+
+        'PORT': '5432',
+
     }
+
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -139,32 +158,14 @@ ACCOUNT_ADAPTER = 'users.adapters.MyAccountAdapter'
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
 SOCIALACCOUNT_PROVIDERS = {
-     'facebook': {
-        'METHOD': 'oauth2',
+    'google': {
         'SCOPE': [
+            'profile',
             'email',
-            'public_profile',
         ],
         'AUTH_PARAMS': {
-            'auth_type': 'reauthenticate'
+            'access_type': 'online',
         },
-        'FIELDS': [
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'verified',
-        ],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': lambda request: 'en_US',
-        'VERIFIED_EMAIL': True,
-        'VERSION': 'v7.0'
-    },
-    'github': {
-        'SCOPE': [
-            'user',
-            'repo',
-            'read:org',
-        ],
+        'OAUTH_PKCE_ENABLED': True,
     }
 }
