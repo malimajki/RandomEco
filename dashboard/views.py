@@ -1,7 +1,26 @@
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from blog.models import Post
+from shop.models import Product, Order
+from django.contrib.auth.models import User
 from .forms import PostForm
+
+def index(request):
+    products = Product.objects.all()
+    posts = Post.objects.all()
+    users = User.objects.all()
+    orders = Order.objects.all()
+    
+
+    context = {
+        "products":products,
+        "posts":posts,
+        "users":users,
+        "orders":orders,
+        }
+
+    return render (request, "dashboard/index.html", context)
 
 class PostListView(ListView):
     model = Post
