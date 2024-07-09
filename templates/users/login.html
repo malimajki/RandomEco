@@ -3,25 +3,26 @@
 <h1 class="mb-6 text-2xl">Log in</h1>
 <div class="my-6 space-y-4">
   
-    <a href="{% provider_login_url "facebook" %}" class="flex bg-blue-500 items-center justify-center w-full p-2 space-x-4 border rounded-md">
+    <a href="{% provider_login_url 'facebook' %}" class="flex text-white font-semibold bg-blue-600 hover:bg-blue-700 focus:ring-offset-blue-200 transition ease-in duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 items-center justify-center w-full p-2 space-x-4 rounded-lg">
       <svg viewBox="0 0 32 32" class="w-5 h-5 fill-current">    
         <path d="M31.998 16c0 -8.837 -7.163 -16 -15.999 -16S0 7.163 0 16c0 7.984 5.851 14.603 13.499 15.803v-11.179H9.438v-4.625h4.061v-3.524c0 -4.011 2.389 -6.225 6.043 -6.225 1.75 0 3.581 0.313 3.581 0.313v3.937h-2.015c-1.987 0 -2.607 1.233 -2.607 2.499V16h4.437l-0.709 4.625h-3.728v11.179c7.648 -1.2 13.499 -7.819 13.499 -15.804Z"/>
     </svg>
         <p class="-mb-1 pb-1">Login with Facebook</p>
     </a>
 
-    <a href="/accounts/google/login/" class="flex bg-blue-500 items-center justify-center w-full p-2 space-x-4 border rounded-md">
-      <svg viewBox="0 0 32 32" class="w-5 h-5 fill-current">
-        <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
-    </svg>
+    <a href="{% provider_login_url 'google' %}" class="flex text-white font-semibold bg-red-600 hover:bg-red-700 focus:ring-offset-red-200 transition ease-in duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 items-center justify-center w-full p-2 space-x-4 rounded-lg">
+        <svg width="20" height="20" fill="currentColor" class="mr-2" viewBox="0 0 1792 1792">
+            <path d="M896 786h725q12 67 12 128 0 217-91 387.5t-259.5 266.5-386.5 96q-157 0-299-60.5t-245-163.5-163.5-245-60.5-299 60.5-299 163.5-245 245-163.5 299-60.5q300 0 515 201l-209 201q-123-119-306-119-129 0-238.5 65t-173.5 176.5-64 243.5 64 243.5 173.5 176.5 238.5 65q87 0 160-24t120-60 82-82 51.5-87 22.5-78h-436v-264z">
+            </path>
+        </svg>
         <p class="-mb-1 pb-1">Login with Google</p>
     </a>
 
-    <a class="flex bg-blue-500 items-center justify-center w-full p-2 space-x-4 border rounded-md">
-        <svg viewBox="0 0 32 32" class="w-5 h-5 fill-current">
-            <path d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z"></path>
+    <a href="{% provider_login_url 'github' %}" class="flex text-white font-semibold bg-gray-600 hover:bg-gray-700 focus:ring-offset-gray-200 transition ease-in duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 items-center justify-center w-full p-2 space-x-4 rounded-lg">
+        <svg width="20" height="20" fill="currentColor" class="mr-2" viewBox="0 0 1792 1792">
+            <path d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5q0 251-146.5 451.5t-378.5 277.5q-27 5-40-7t-13-30q0-3 .5-76.5t.5-134.5q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-119-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-85-13.5q-45 113-8 204-79 87-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-39 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 88.5t.5 54.5q0 18-13 30t-40 7q-232-77-378.5-277.5t-146.5-451.5q0-209 103-385.5t279.5-279.5 385.5-103zm-477 1103q3-7-7-12-10-3-13 2-3 7 7 12 9 6 13-2zm31 34q7-5-2-16-10-9-16-3-7 5 2 16 10 10 16 3zm30 45q9-7 0-19-8-13-17-6-9 5 0 18t17 7zm42 42q8-8-4-19-12-12-20-3-9 8 4 19 12 12 20 3zm57 25q3-11-13-16-15-4-19 7t13 15q15 6 19-6zm63 5q0-13-17-11-16 0-16 11 0 13 17 11 16 0 16-11zm58-10q-2-11-18-9-16 3-14 15t18 8 14-14z"></path>
         </svg>
-        <p class="-mb-1 pb-1">Login with Twitter</p>
+        <p class="-mb-1 pb-1">Login with GitHub</p>
     </a>
     
 </div>
@@ -31,12 +32,12 @@
 
         <div>
             <label>E-mail</label>
-            <input type="text" name="username" class="w-full mt-2 py-4 px-6 bg-white rounded-xl">
+            <input type="text" name="username" class="w-full text-black mt-2 py-4 px-6 bg-white rounded-xl">
         </div>
 
         <div>
             <label>Password</label>
-            <input type="password" name="password" class="w-full mt-2 py-4 px-6 bg-white rounded-xl">
+            <input type="password" name="password" class="w-full text-black mt-2 py-4 px-6 bg-white rounded-xl">
         </div>
 
         {% if form.errors %}
